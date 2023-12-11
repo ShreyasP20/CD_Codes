@@ -1,0 +1,54 @@
+5. Implement Parser for C programming language
+
+
+
+%{
+#include "y.tab.h"
+extern int yylval;
+%}
+%%
+for {return (FOR);}
+"(" {return (OPBR);}
+")" {return (CLBR);}
+";" {return (SEMIC);}
+"=" {return (EQU);}
+"<"|">" {return (RELOP);}
+"++" {return (INC);}
+"--" {return (DEC);}
+[a-zA-Z]+ {yylval=yytext[0];return(ID);}
+[0-9]+ {yylval=atoi(yytext);return(NUM);}
+%%
+yywrap()
+{
+return 1;
+}
+YACC:
+%{
+#include <stdio.h>
+int flag=0;
+%}
+%token FOR OPBR CLBR SEMIC RELOP EQU ID NUM RELOP INC DEC
+%%
+S: FOR '(' E1 ';' E2 ';' E3 ')'
+{printf( "Syntax is Valid" );flag=1; };
+E1: ID '=' ID
+| ID “=” NUM
+;
+E2: ID “<” ID
+| ID “<” NUM
+| ID “>” ID
+| ID “>” NUM
+;
+E3: ID “++”
+| ID “—“
+;
+%%
+main()
+{
+yyparse();
+}
+yyerror(const char *msg)
+{
+if(flag==0);
+printf("Syntax Invalid");
+}

@@ -1,0 +1,26 @@
+3.1 Implement LEX/FLEX code to count the number of characters, words and lines in an input file
+
+#(note press ctrl + D to end input)#
+
+
+
+%{
+    #include<stdio.h>
+    int w=0,ch=0,ln=0,v=0;
+%}
+%%
+[a e i o u A E I O U]+ {v++;ch+=yyleng;}
+[^\t\n]+ {w++;ch+=yyleng;}
+[\n] {ln++;ch+=yyleng;}
+%%
+
+int yywrap(){return 1;}
+
+int main(){
+    printf("enter the sentence :\n");
+    yylex();
+    printf("Number of lines %d\n",ln);
+    printf("Number of vowels %d",v);
+    printf("Number of words, NO. of characters :%d,%d\n",w,ch);
+    return 0;
+}

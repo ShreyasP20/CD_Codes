@@ -1,0 +1,108 @@
+3.2
+Write a program to change case of given input (Upper, Lower, Sentence, Toggle)
+
+
+#EASYYY ---
+
+%{
+    #include<stdio.h>
+%}
+
+%%
+[a-z]+ (printf("%c",yytext[0]-('a'-'A'));
+[A-Z] (printf("%c",yytext[0]-('A'-'a'));
+0 {return 0;}
+%%
+int main(){
+    yylex();
+    return 0;
+}
+
+
+# HARDD----
+
+%{
+#include<stdio.h>
+lower [a-z]
+CAPS  [A-Z]
+space    [ \t\n]
+%}
+
+%%
+{lower}         {printf("%c",yytext[0]- 32);}
+{CAPS}        {printf("%c",yytext[0]+ 32);}
+{space}        ECHO;
+.                    ECHO;
+%%
+
+main()
+{
+    yylex();
+   
+}
+V)
+%{
+#include <stdio.h>
+#include <string.h>
+%}
+
+%%
+[Uu]pper {
+    for (int i = 0; i < yyleng; i++) {
+        if (yytext[i] >= 97 && yytext[i] <= 122) {
+            yytext[i] -= 32;
+        }
+    }
+    printf("Upper Case: %s", yytext);
+}
+
+[Ll]ower {
+    for (int i = 0; i < yyleng; i++) {
+        if (yytext[i] >= 65 && yytext[i] <= 90) {
+            yytext[i] += 32;
+        }
+    }
+    printf("Lower Case: %s", yytext);
+}
+
+[Ss]entence {
+    if (yytext[0] >= 97 && yytext[0] <= 122) {
+        yytext[0] -= 32;
+    }
+    for (int i = 1; i < yyleng; i++) {
+        if (yytext[i] >= 65 && yytext[i] <= 90) {
+            yytext[i] += 32;
+        }
+    }
+    printf("Sentence Case: %s", yytext);
+}
+
+[Tt]oggle {
+    for (int i = 0; i < yyleng; i++) {
+        if (yytext[i] >= 65 && yytext[i] <= 90) {
+            yytext[i] += 32;
+        } else if (yytext[i] >= 97 && yytext[i] <= 122) {
+            yytext[i] -= 32;
+        }
+    }
+    printf("Toggle Case: %s", yytext);
+}
+
+. {
+    printf("Invalid Choice: %s", yytext);
+}
+
+%%
+
+int yywrap() { return 1; }
+
+int main() {
+    char input[100];
+    printf("Enter the choice (Upper, Lower, Sentence, Toggle): ");
+    yylex();
+    printf("\nEnter the string to change case: ");
+    scanf("%s", input);
+    yy_scan_string(input);
+    yylex();
+    return 0;
+}

@@ -1,0 +1,43 @@
+1.2 Implement a Lexical Analyzer using LEX for a subset of C programming language
+
+
+#include<stdio.h>
+int main()
+{
+int a,b,c;
+printf("Enter the values for a and b :");
+scanf("%d%d",&a,&b);
+c=a+b;
+printf("%d",c);
+return 0;
+}
+
+LEX program:
+
+%{
+#include<stdio.h>
+#include<string.h>
+%}
+
+%%
+#include<stdio.h> {ECHO; printf("Header file");}
+int|else|long|switch|char|return|for|void|do|if|while|float|scanf|printf    {ECHO; printf("\tKeyword\n");}
+[{};,()]   {ECHO; printf("\tDelimiter\n");}
+[+-/=*%]   {ECHO; printf("\tOperator\n");}
+([a-zA-Z][0-9])+|[a-zA-Z]* {ECHO; printf("\tIdentifier\n");}  
+[%d|%c|%s] {ECHO; printf("\tdatatypes\n");}
+ 
+%%
+
+int yywrap()
+{
+return 1;
+}
+
+int main(void)
+{
+extern FILE *yyin, *yyout;
+yyin = fopen("add.c", "r");
+yylex();
+return 0;
+}
